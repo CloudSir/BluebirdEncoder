@@ -2,14 +2,14 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-11-10 08:53:45
- * @LastEditTime: 2022-12-22 06:53:27
+ * @LastEditTime: 2022-12-22 13:16:17
  * @LastEditors: CloudSir
  * @Description:
  */
 
 #include <stdio.h>
 
-#include "data_proto/data_proto.h"
+#include "bluebird_encoder/bluebird_encoder.h"
 
 /**
  * 串口发送函数，需要根据单片机的类型进行重写

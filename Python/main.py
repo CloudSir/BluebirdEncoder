@@ -2,17 +2,17 @@
 Author: CloudSir
 Github: https://github.com/CloudSir
 Date: 2022-11-10 08:53:45
-LastEditTime: 2022-12-22 06:42:05
+LastEditTime: 2022-12-22 13:16:41
 LastEditors: CloudSir
 Description: 
 '''
-import data_proto
+import bluebird_encoder
 
 send_datas = [-1234, -567, 1456, 32767]
 
 print("原数组：", send_datas)
 
-data_cls = data_proto.Data()
+data_cls = bluebird_encoder.Data()
 
 # 编码
 sended_bytes = data_cls.pack_data(send_datas, is_int16=True)
