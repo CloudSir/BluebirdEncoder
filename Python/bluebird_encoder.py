@@ -1,10 +1,10 @@
 '''
 Author: CloudSir
-Github: https://github.com/CloudSir
+Github: https://github.com/CloudSir/BluebirdEncoder
 Date: 2022-12-21 21:17:29
-LastEditTime: 2022-12-22 06:48:43
+LastEditTime: 2022-12-22 15:02:20
 LastEditors: CloudSir
-Description: 
+Description: 青鸟编码器
 '''
 
 class Data:

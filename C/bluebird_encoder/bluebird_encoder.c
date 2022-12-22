@@ -1,10 +1,10 @@
 /*
  * @Author: CloudSir
- * @Github: https://github.com/CloudSir
+ * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-12-21 20:36:22
- * @LastEditTime: 2022-12-22 13:15:52
+ * @LastEditTime: 2022-12-22 15:03:31
  * @LastEditors: CloudSir
- * @Description: 通信协议编码和解码工具
+ * @Description: 青鸟编码器
  */
 
 #include "bluebird_encoder.h"

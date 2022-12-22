@@ -1,10 +1,10 @@
 '''
 Author: CloudSir
-Github: https://github.com/CloudSir
+Github: https://github.com/CloudSir/BluebirdEncoder
 Date: 2022-11-10 08:53:45
-LastEditTime: 2022-12-22 13:16:41
+LastEditTime: 2022-12-22 15:02:33
 LastEditors: CloudSir
-Description: 
+Description: 青鸟编码器使用示例
 '''
 import bluebird_encoder
 
