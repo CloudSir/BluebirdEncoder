@@ -2,7 +2,7 @@
 Author: CloudSir
 Github: https://github.com/CloudSir/BluebirdEncoder
 Date: 2022-12-21 21:17:29
-LastEditTime: 2022-12-24 13:31:41
+LastEditTime: 2022-12-24 15:44:26
 LastEditors: CloudSir
 Description: 青鸟编码器
 '''
@@ -125,13 +125,13 @@ class BlueBird:
 
         data_bytes = struct.pack("<" + DIC[is_int16]['type'] * len(data_list), *data_list)
 
-        send_data.append(0xEB)                        # 帧头：0xEB
-        send_data.append(0x90)                        # 帧头：0x90
+        send_data.append(self.head1)                  # 帧头
+        send_data.append(self.head2)                  # 帧头
         send_data.append((len(data_list) << 1) 
                             | DIC[is_int16]['flag'])  # 数据长度;数据类型    
         send_data.extend(data_bytes)                  # 数据   
         send_data.append(sum(data_bytes) & 0xFF)      # 校验和
-        send_data.append(0xBE)                        # 帧尾：0xBE
+        send_data.append(self.tail)                   # 帧尾
         
         self.__send_data = bytes(send_data)
 
