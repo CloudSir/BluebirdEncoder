@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-21 20:35:20
- * @LastEditTime: 2022-12-24 13:23:02
+ * @LastEditTime: 2022-12-24 14:41:06
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器头文件
  */
@@ -30,6 +30,9 @@ typedef struct
     } data_union;  
     uint8_t check_sum;              // 校验和
     uint8_t tail;                   // 帧尾
+
+    uint8_t __i;
+    uint8_t __state;
 } Data_t;
 
 /**

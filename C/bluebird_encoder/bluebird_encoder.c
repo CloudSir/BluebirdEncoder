@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-12-21 20:36:22
- * @LastEditTime: 2022-12-22 15:03:31
+ * @LastEditTime: 2022-12-24 14:52:23
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器
  */
@@ -60,6 +60,8 @@ uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int))
     uart_send(data_s->data_union.buffer_data, data_s->length * 2);
     uart_send(&data_s->check_sum, 1);
     uart_send(&data_s->tail, 1);
+
+    return 1;
 }
 
 /**
@@ -70,15 +72,17 @@ uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int))
  */
 uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
 {
-    static uint8_t state = 0;
-    static uint8_t i = 0;
-
     // 判断当前状态
-    switch (state)
+    switch (data_s-> __state)
     {
+    
+    default: // 初始化状态码
+        data_s-> __state = 0;
+        data_s-> __i = 0;
+
     case 0: // 检查帧头
 
-        if(i == 0)
+        if(data_s-> __i == 0)
         {
             data_s->head1 = 0xEB;
             data_s->head2 = 0x90;
@@ -86,15 +90,15 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
 
             if (data_s->head1 == data) // 检查第一帧头
             {
-                i += 1;
+                data_s-> __i += 1;
             }
         }
-        else if(i == 1)
+        else if(data_s-> __i == 1)
         {
-            i = 0;
+            data_s-> __i = 0;
             if (data_s->head2 == data) // 检查第二帧头
             {
-                state++; // 进入下一状态
+                data_s-> __state++; // 进入下一状态
             }
         }
         
@@ -103,20 +107,20 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
     case 1: // 接收数据的长度变量; 接收数据类型变量;
         data_s->length = data >> 1;
         data_s->type = data & 0x01;
-        state++;
+        data_s-> __state++;
         break;
 
     case 2: // 接收数据
-        data_s->data_union.buffer_data[i++] = data;
-        if (i >= (2 * data_s->length))
+        data_s->data_union.buffer_data[data_s-> __i++] = data;
+        if (data_s-> __i >= (2 * data_s->length))
         {
-            state++;
+            data_s-> __state++;
         }
         break;
 
     case 3: // 接收数据校验和
         data_s->check_sum = data;
-        state++;
+        data_s-> __state++;
         break;
 
     case 4: // 检查帧尾
@@ -133,25 +137,24 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
             if (check_sum == data_s->check_sum)
             {
                 // 接收成功
-
-                state = 0;
+                data_s-> __state = 0;
+                data_s-> __i = 0;
                 return 1;
             }
             else
             {
                 // 校验和错误
-                state = 0;
             }
         }
         else
         {
             // 帧尾错误
-            state = 0;
         }
-        break;
 
-    default:
-        state = 0;
+        // 初始化状态码
+        data_s-> __state = 0;
+        data_s-> __i = 0;
+
         break;
     }
 
