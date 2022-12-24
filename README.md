@@ -75,15 +75,16 @@ send_datas = [-1234, -567, 1456, 32767]
 
 print("原数组：", send_datas)
 
-data_cls = bluebird_encoder.Data()
+bluebird = bluebird_encoder.BlueBird()
 
 # 编码
-sended_bytes = data_cls.pack_data(send_datas, is_int16=True)
+sended_bytes = bluebird.pack(send_datas, is_int16=True)
 
 print("编码后的字节数组:", ",".join([hex(a) for a in sended_bytes]))
 
 # 通过串口发送编码后的字节数组
-# uart.send(sended_bytes)
+# uart.send(sended_bytes)  # 方法一
+# bluebird.send(uart.send) # 方法二
 
 
 # 解码
@@ -93,7 +94,7 @@ for char_ in recieved_bytes:
     # 每次只处理一个字节
     # chr 是串口接收到的长度为 1 的字节数组，一般是 uart.read(1) 返回的值
     chr = bytes([char_])
-    unpacked_data = data_cls.unpack_data(chr)
+    unpacked_data = bluebird.unpack(chr)
     if unpacked_data: # 如果解码完成
         print("解码后的数组:", unpacked_data)
 
@@ -107,7 +108,7 @@ for char_ in recieved_bytes:
 #include "bluebird_encoder/bluebird_encoder.h"
 
 /**
- * 串口发送函数，需要根据单片机进行重写
+ * 串口发送函数，需要根据单片机的类型进行重写
  * @param {uint8_t} *chr 要发送的字节数据
  * @param {int} length 字节数组的长度
  * @return {*}
@@ -127,8 +128,8 @@ int main()
 
 #if 1 // 将数据编码为字节数组，并通过串口发送
     int16_t s[] = {-1234, -567, 1456, 32767};
-    pack_data(&data_packed, s, 4, 1);
-    send_data(&data_packed, uart_send);
+    bluebird_pack(&data_packed, s, 4, 1);
+    bluebird_send(&data_packed, uart_send);
 #endif
 
 
@@ -137,10 +138,10 @@ int main()
     
     for (int i = 0; i < sizeof(chars); i++)
     {
-        // 每次只处理一个字节，如果数据解析完成，unpack_data 函数会返回 1
+        // 每次只处理一个字节，如果数据解析完成，bluebird_unpack 函数会返回 1
 #if 1   //  一般将下列代码放在串口中断中（变量 chr 换成串口接收到的数据）
         char chr = chars[i];
-        if (unpack_data(&data_unpacked, chr))
+        if (bluebird_unpack(&data_unpacked, chr))
         {
             printf("\n解析数据完成，");
 

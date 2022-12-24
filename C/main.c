@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-11-10 08:53:45
- * @LastEditTime: 2022-12-22 15:02:59
+ * @LastEditTime: 2022-12-24 13:23:51
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器使用示例
  */
@@ -32,8 +32,8 @@ int main()
 
 #if 1 // 将数据编码为字节数组，并通过串口发送
     int16_t s[] = {-1234, -567, 1456, 32767};
-    pack_data(&data_packed, s, 4, 1);
-    send_data(&data_packed, uart_send);
+    bluebird_pack(&data_packed, s, 4, 1);
+    bluebird_send(&data_packed, uart_send);
 #endif
 
 
@@ -42,10 +42,10 @@ int main()
     
     for (int i = 0; i < sizeof(chars); i++)
     {
-        // 每次只处理一个字节，如果数据解析完成，unpack_data 函数会返回 1
+        // 每次只处理一个字节，如果数据解析完成，bluebird_unpack 函数会返回 1
 #if 1   //  一般将下列代码放在串口中断中（变量 chr 换成串口接收到的数据）
         char chr = chars[i];
-        if (unpack_data(&data_unpacked, chr))
+        if (bluebird_unpack(&data_unpacked, chr))
         {
             printf("\n解析数据完成，");
 

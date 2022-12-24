@@ -17,7 +17,7 @@
  * @param {uint8_t} type 1:int16; 0:uint16
  * @return {uint_8} 1:成功；0：失败
  */
-uint8_t pack_data(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type)
+uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type)
 {
     data_s->head1 = 0xEB;
     data_s->head2 = 0x90;
@@ -50,7 +50,7 @@ uint8_t pack_data(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type)
  * @param {(*uart_send)(uint8_t *, int)} 串口发送函数的指针
  * @return {*}
  */
-uint8_t send_data(Data_t *data_s, void (*uart_send)(uint8_t *, int))
+uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int))
 {
     uint8_t D1 = (data_s->length << 1) | data_s->type;
 
@@ -68,7 +68,7 @@ uint8_t send_data(Data_t *data_s, void (*uart_send)(uint8_t *, int))
  * @param {Data_t} *data_s 数据结构体指针
  * @return {uint8_t} 1:接收成功；0：接收未完成；
  */
-uint8_t unpack_data(Data_t *data_s, uint8_t data)
+uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
 {
     static uint8_t state = 0;
     static uint8_t i = 0;

@@ -2,12 +2,12 @@
 Author: CloudSir
 Github: https://github.com/CloudSir/BluebirdEncoder
 Date: 2022-12-21 21:17:29
-LastEditTime: 2022-12-22 22:30:15
+LastEditTime: 2022-12-24 13:31:41
 LastEditors: CloudSir
 Description: 青鸟编码器
 '''
 
-class Data:
+class BlueBird:
 
     data_lis = []  # 解码后的数组
     length = 0     # 数据长度
@@ -20,8 +20,10 @@ class Data:
     __state_code = 0
     __i = 0
     __buffer_lis = []
+
+    __send_data = []
     
-    def unpack_data(self, data_byte):
+    def unpack(self, data_byte):
         '''
         data_byte: 长度为1的字节数组（一般是 uart.read(1) 的返回值）
         return {解包后的数据}
@@ -97,7 +99,7 @@ class Data:
         return False
 
 
-    def pack_data(self, data_list, is_int16=False):
+    def pack(self, data_list, is_int16=False):
         '''
         data_list: 要编码的数组
         is_int16: {True:int16类型；False：uint16类型}
@@ -131,5 +133,9 @@ class Data:
         send_data.append(sum(data_bytes) & 0xFF)      # 校验和
         send_data.append(0xBE)                        # 帧尾：0xBE
         
-        return bytes(send_data)
-    
+        self.__send_data = bytes(send_data)
+
+        return self.__send_data
+
+    def send(self, uart_send):
+        uart_send(self.__send_data)

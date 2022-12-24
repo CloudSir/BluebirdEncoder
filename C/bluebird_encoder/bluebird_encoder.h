@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-21 20:35:20
- * @LastEditTime: 2022-12-22 15:03:49
+ * @LastEditTime: 2022-12-24 13:23:02
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器头文件
  */
@@ -40,7 +40,7 @@ typedef struct
  * @param {uint8_t} type 1:int16; 0:uint16
  * @return {uint_8} 1:成功；0：失败
  */
-uint8_t pack_data(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type);
+uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type);
 
 /**
  * 发送编码后的字节数组
@@ -48,7 +48,7 @@ uint8_t pack_data(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type);
  * @param {(*uart_send)(uint8_t *, int)} 串口发送函数的指针
  * @return {*}
  */
-uint8_t send_data(Data_t *data_s, void (*uart_send)(uint8_t *, int));
+uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int));
 
 /**
  * 将接收的字节数组解析为数据
@@ -56,7 +56,7 @@ uint8_t send_data(Data_t *data_s, void (*uart_send)(uint8_t *, int));
  * @param {Data_t} *data_s 数据结构体指针
  * @return {uint8_t} 1:接收成功；0：接收未完成；
  */
-uint8_t unpack_data(Data_t *data_s, uint8_t data);
+uint8_t bluebird_unpack(Data_t *data_s, uint8_t data);
 
 #ifdef __cplusplus
 }
