@@ -13,8 +13,9 @@
 
 ### Roadmap
 
-- C 语言版本加入初始化函数
+- C 语言版本加入自定义最大传输长度
 - 编写 C51 版本
+  - 在 C 语言版本的基础上加一个字节序交换的流程即可
 - 编写 Lua 版本
 
 ### 注意事项
@@ -166,6 +167,10 @@ int main()
 {
     Data_t data_packed;
     Data_t data_unpacked;
+
+    // 初始化数据结构体
+    bluebird_init(&data_packed);
+    bluebird_init(&data_unpacked);
 
 #if 1 // 将数据编码为字节数组，并通过串口发送
     int16_t s[] = {-1234, -567, 1456, 32767};

@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-11-10 08:53:45
- * @LastEditTime: 2022-12-24 14:47:17
+ * @LastEditTime: 2022-12-25 17:12:19
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器使用示例
  */
@@ -29,6 +29,10 @@ int main()
 {
     Data_t data_packed;
     Data_t data_unpacked;
+
+    // 初始化数据结构体
+    bluebird_init(&data_packed);
+    bluebird_init(&data_unpacked);
 
 #if 1 // 将数据编码为字节数组，并通过串口发送
     int16_t s[] = {-1234, -567, 1456, 32767};

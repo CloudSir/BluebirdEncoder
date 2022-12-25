@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-21 20:35:20
- * @LastEditTime: 2022-12-24 14:41:06
+ * @LastEditTime: 2022-12-25 17:11:36
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器头文件
  */
@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <memory.h>
 
 typedef struct
 {
@@ -60,6 +61,13 @@ uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int));
  * @return {uint8_t} 1:接收成功；0：接收未完成；
  */
 uint8_t bluebird_unpack(Data_t *data_s, uint8_t data);
+
+/**
+ * 数据结构体初始化函数
+ * @param {Data_t} *data_s 数据结构体
+ * @return {*}
+ */
+void bluebird_init(Data_t *data_s);
 
 #ifdef __cplusplus
 }

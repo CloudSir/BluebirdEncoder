@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-12-21 20:36:22
- * @LastEditTime: 2022-12-24 14:52:23
+ * @LastEditTime: 2022-12-25 17:10:19
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器
  */
@@ -84,10 +84,6 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
 
         if(data_s-> __i == 0)
         {
-            data_s->head1 = 0xEB;
-            data_s->head2 = 0x90;
-            data_s->tail = 0xBE;
-
             if (data_s->head1 == data) // 检查第一帧头
             {
                 data_s-> __i += 1;
@@ -159,4 +155,22 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
     }
 
     return 0;
+}
+
+/**
+ * 数据结构体初始化函数
+ * @param {Data_t} *data_s 数据结构体
+ * @return {*}
+ */
+void bluebird_init(Data_t *data_s)
+{
+    data_s-> head1 = 0xEB;
+    data_s-> head2 = 0x90;
+    data_s-> length = 0;
+    data_s-> type = 0;
+    memset(data_s-> data_union.buffer_data, 0, 254);
+    data_s-> check_sum = 0;
+    data_s-> tail = 0xBE;
+    data_s-> __state = 0;
+    data_s-> __i = 0;
 }
