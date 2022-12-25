@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-21 20:35:20
- * @LastEditTime: 2022-12-25 17:11:36
+ * @LastEditTime: 2022-12-25 17:40:33
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器头文件
  */
@@ -17,17 +17,19 @@ extern "C" {
 #include <stdint.h>
 #include <memory.h>
 
+#define BLUEBIRD_MAX_DATA_LENGTH 127  // 接收/发送数据的最大长度，正整数，最多127
+
 typedef struct
 {
-    uint8_t head1;                   // 帧头
-    uint8_t head2;                   // 帧头
+    uint8_t head1;                  // 帧头
+    uint8_t head2;                  // 帧头
     uint8_t length : 7;             // 解码后的数据长度，范围 0-127
     uint8_t type : 1;               // 数据类型
     union
     {
-        uint8_t buffer_data[254];   // 编码后的字节数组
-        uint16_t data_u16[127];     // 解码后的uint16类型数组
-        int16_t data_i16[127];      // 解码后的int16类型数组
+        uint8_t buffer_data[BLUEBIRD_MAX_DATA_LENGTH * 2];  // 编码后的字节数组
+        uint16_t data_u16[BLUEBIRD_MAX_DATA_LENGTH];        // 解码后的uint16类型数组
+        int16_t data_i16[BLUEBIRD_MAX_DATA_LENGTH];         // 解码后的int16类型数组
     } data_union;  
     uint8_t check_sum;              // 校验和
     uint8_t tail;                   // 帧尾
