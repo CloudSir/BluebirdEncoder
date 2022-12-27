@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-27 10:18:08
- * @LastEditTime: 2022-12-27 10:27:42
+ * @LastEditTime: 2022-12-27 10:38:22
  * @LastEditors: CloudSir
  * @Description: 
  */
@@ -39,12 +39,12 @@ static void swap_data_seq(Data_t *data_s)
 /**
  * 将要发送的数据编码成字节数组
  * @param {Data_t} *data_s 数据结构体指针
- * @param {uint16_t} *data 要传输的数据的数组
- * @param {uint8_t} length 要传输的数据长度
- * @param {uint8_t} type 1:int16; 0:uint16
+ * @param {unsigned short} *data 要传输的数据的数组
+ * @param {unsigned char} length 要传输的数据长度
+ * @param {unsigned char} type 1:int16; 0:uint16
  * @return {uint_8} 1:成功；0：失败
  */
-uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type)
+unsigned char bluebird_pack(Data_t *data_s, unsigned short *data, unsigned char length, unsigned char type)
 {
     data_s->head1 = 0xEB;
     data_s->head2 = 0x90;
@@ -59,7 +59,7 @@ uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t ty
         if (!type)
             data_s->data_union.data_u16[i] = data[i];
         else
-            data_s->data_union.data_i16[i] = (int16_t)data[i];
+            data_s->data_union.data_i16[i] = (short)data[i];
     }
 
     // 交换字节序
@@ -77,12 +77,12 @@ uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t ty
 /**
  * 发送编码后的字节数组
  * @param {Data_t} *data_s 数据结构体指针
- * @param {(*uart_send)(uint8_t *, int)} 串口发送函数的指针
+ * @param {(*uart_send)(unsigned char *, int)} 串口发送函数的指针
  * @return {*}
  */
-uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int))
+unsigned char bluebird_send(Data_t *data_s, void (*uart_send)(unsigned char *, int))
 {
-    uint8_t D1 = (data_s->length << 1) | data_s->type;
+    unsigned char D1 = (data_s->length << 1) | data_s->type;
 
     uart_send(&data_s->head1, 1);
     uart_send(&data_s->head2, 1);
@@ -96,11 +96,11 @@ uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int))
 
 /**
  * 将接收的字节数组解析为数据
- * @param {uint8_t} data 接收的字节
+ * @param {unsigned char} data 接收的字节
  * @param {Data_t} *data_s 数据结构体指针
- * @return {uint8_t} 1:接收成功；0：接收未完成；
+ * @return {unsigned char} 1:接收成功；0：接收未完成；
  */
-uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
+unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
 {
     // 判断当前状态
     switch (data_s-> __state)
@@ -153,9 +153,9 @@ uint8_t bluebird_unpack(Data_t *data_s, uint8_t data)
         if (data_s->tail == data)
         {
 
-            uint8_t check_sum = 0;
+            unsigned char check_sum = 0;
             // 验证校验和是否正确
-            for (int i = 0; i < sizeof(uint16_t) * data_s->length; i++)
+            for (int i = 0; i < sizeof(unsigned short) * data_s->length; i++)
             {
                 check_sum += data_s->data_union.buffer_data[i];
             }
