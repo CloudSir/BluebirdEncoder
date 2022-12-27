@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir/BluebirdEncoder
  * @Date: 2022-12-21 20:36:22
- * @LastEditTime: 2022-12-25 17:10:19
+ * @LastEditTime: 2022-12-27 10:08:39
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器
  */
@@ -168,7 +168,7 @@ void bluebird_init(Data_t *data_s)
     data_s-> head2 = 0x90;
     data_s-> length = 0;
     data_s-> type = 0;
-    memset(data_s-> data_union.buffer_data, 0, 254);
+    memset(data_s-> data_union.buffer_data, 0, BLUEBIRD_MAX_DATA_LENGTH * 2);
     data_s-> check_sum = 0;
     data_s-> tail = 0xBE;
     data_s-> __state = 0;
