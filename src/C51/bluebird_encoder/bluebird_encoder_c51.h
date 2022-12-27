@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-27 10:18:19
- * @LastEditTime: 2022-12-27 10:46:52
+ * @LastEditTime: 2022-12-27 10:53:57
  * @LastEditors: CloudSir
  * @Description: 
  */
@@ -13,8 +13,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <memory.h>
 
 #define BLUEBIRD_MAX_DATA_LENGTH 127  // 接收/发送数据的最大长度，正整数，最多127
 

@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-27 10:18:08
- * @LastEditTime: 2022-12-27 10:47:35
+ * @LastEditTime: 2022-12-27 10:54:53
  * @LastEditors: CloudSir
  * @Description: 
  */
@@ -35,6 +35,22 @@ static void swap_u16_seq(unsigned char *bytes, int length)
 static void swap_data_seq(Data_t *data_s)
 {
     swap_u16_seq(data_s->data_union.buffer_data, data_s->length * 2);
+}
+
+/**
+ * 标准库 memset 的实现
+ * @param {char} *dst
+ * @param {int} val
+ * @param {int} size_
+ * @return {*}
+ */
+static void my_memset(char *dst, int val, int size_)
+{
+    int i = 0;
+    for(i = 0; i < size_; i++)
+    {
+        dst[i] = val;
+    }
 }
 
 /**
@@ -207,7 +223,7 @@ void bluebird_init(Data_t *data_s)
     data_s-> head2 = 0x90;
     data_s-> length = 0;
     data_s-> type = 0;
-    memset(data_s-> data_union.buffer_data, 0, BLUEBIRD_MAX_DATA_LENGTH * 2);
+    my_memset(data_s-> data_union.buffer_data, 0, BLUEBIRD_MAX_DATA_LENGTH * 2);
     data_s-> check_sum = 0;
     data_s-> tail = 0xBE;
     data_s-> __state = 0;
