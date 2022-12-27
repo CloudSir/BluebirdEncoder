@@ -1,0 +1,78 @@
+/*
+ * @Author: CloudSir
+ * @Github: https://github.com/CloudSir
+ * @Date: 2022-12-27 10:18:19
+ * @LastEditTime: 2022-12-27 10:19:21
+ * @LastEditors: CloudSir
+ * @Description: 
+ */
+
+#ifndef __BLUEBIRD_ENCODER__
+#define __BLUEBIRD_ENCODER__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <memory.h>
+
+#define BLUEBIRD_MAX_DATA_LENGTH 127  // 接收/发送数据的最大长度，正整数，最多127
+
+typedef struct
+{
+    uint8_t head1;                  // 帧头
+    uint8_t head2;                  // 帧头
+    uint8_t length : 7;             // 解码后的数据长度，范围 0-127
+    uint8_t type : 1;               // 数据类型
+    union
+    {
+        uint8_t buffer_data[BLUEBIRD_MAX_DATA_LENGTH * 2];  // 编码后的字节数组
+        uint16_t data_u16[BLUEBIRD_MAX_DATA_LENGTH];        // 解码后的uint16类型数组
+        int16_t data_i16[BLUEBIRD_MAX_DATA_LENGTH];         // 解码后的int16类型数组
+    } data_union;  
+    uint8_t check_sum;              // 校验和
+    uint8_t tail;                   // 帧尾
+
+    uint8_t __i;
+    uint8_t __state;
+} Data_t;
+
+/**
+ * 将要发送的数据编码成字节数组
+ * @param {Data_t} *data_s 数据结构体指针
+ * @param {uint16_t} *data 要传输的数据的数组
+ * @param {uint8_t} length 要传输的数据长度
+ * @param {uint8_t} type 1:int16; 0:uint16
+ * @return {uint_8} 1:成功；0：失败
+ */
+uint8_t bluebird_pack(Data_t *data_s, uint16_t *data, uint8_t length, uint8_t type);
+
+/**
+ * 发送编码后的字节数组
+ * @param {Data_t} *data_s 数据结构体指针
+ * @param {(*uart_send)(uint8_t *, int)} 串口发送函数的指针
+ * @return {*}
+ */
+uint8_t bluebird_send(Data_t *data_s, void (*uart_send)(uint8_t *, int));
+
+/**
+ * 将接收的字节数组解析为数据
+ * @param {uint8_t} data 接收的字节
+ * @param {Data_t} *data_s 数据结构体指针
+ * @return {uint8_t} 1:接收成功；0：接收未完成；
+ */
+uint8_t bluebird_unpack(Data_t *data_s, uint8_t data);
+
+/**
+ * 数据结构体初始化函数
+ * @param {Data_t} *data_s 数据结构体
+ * @return {*}
+ */
+void bluebird_init(Data_t *data_s);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
