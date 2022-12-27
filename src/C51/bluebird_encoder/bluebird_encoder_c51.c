@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-27 10:18:08
- * @LastEditTime: 2022-12-27 10:38:22
+ * @LastEditTime: 2022-12-27 10:47:35
  * @LastEditors: CloudSir
  * @Description: 
  */
@@ -18,7 +18,8 @@
 static void swap_u16_seq(unsigned char *bytes, int length)
 {
     unsigned char tmp;
-    for(int i = 0; i < length; i+=2)
+    int i = 0;
+    for(i = 0; i < length; i+=2)
     {
         tmp =  bytes[i];
         bytes[i] = bytes[i+1];
@@ -39,13 +40,15 @@ static void swap_data_seq(Data_t *data_s)
 /**
  * 将要发送的数据编码成字节数组
  * @param {Data_t} *data_s 数据结构体指针
- * @param {unsigned short} *data 要传输的数据的数组
+ * @param {unsigned short} *data_ 要传输的数据的数组
  * @param {unsigned char} length 要传输的数据长度
  * @param {unsigned char} type 1:int16; 0:uint16
  * @return {uint_8} 1:成功；0：失败
  */
-unsigned char bluebird_pack(Data_t *data_s, unsigned short *data, unsigned char length, unsigned char type)
+unsigned char bluebird_pack(Data_t *data_s, unsigned short *data_, unsigned char length, unsigned char type)
 {
+    int i = 0;
+
     data_s->head1 = 0xEB;
     data_s->head2 = 0x90;
     data_s->tail = 0xBE;
@@ -54,19 +57,19 @@ unsigned char bluebird_pack(Data_t *data_s, unsigned short *data, unsigned char 
     data_s->type = type;
 
     // 填充数据
-    for (int i = 0; i < length; i++)
+    for (i = 0; i < length; i++)
     {
         if (!type)
-            data_s->data_union.data_u16[i] = data[i];
+            data_s->data_union.data_u16[i] = data_[i];
         else
-            data_s->data_union.data_i16[i] = (short)data[i];
+            data_s->data_union.data_i16[i] = (short)data_[i];
     }
 
     // 交换字节序
     swap_data_seq(data_s);
 
     // 计算校验和
-    for (int i = 0; i < length * 2; i++)
+    for (i = 0; i < length * 2; i++)
     {
         data_s->check_sum += data_s->data_union.buffer_data[i];
     }
@@ -96,12 +99,16 @@ unsigned char bluebird_send(Data_t *data_s, void (*uart_send)(unsigned char *, i
 
 /**
  * 将接收的字节数组解析为数据
- * @param {unsigned char} data 接收的字节
+ * @param {unsigned char} data_ 接收的字节
  * @param {Data_t} *data_s 数据结构体指针
  * @return {unsigned char} 1:接收成功；0：接收未完成；
  */
-unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
+unsigned char bluebird_unpack(Data_t *data_s, unsigned char data_)
 {
+
+    unsigned char check_sum = 0;  // 计算出的校验和
+    int i = 0;                    // for 循环计数变量
+
     // 判断当前状态
     switch (data_s-> __state)
     {
@@ -114,7 +121,7 @@ unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
 
         if(data_s-> __i == 0)
         {
-            if (data_s->head1 == data) // 检查第一帧头
+            if (data_s->head1 == data_) // 检查第一帧头
             {
                 data_s-> __i += 1;
             }
@@ -122,7 +129,7 @@ unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
         else if(data_s-> __i == 1)
         {
             data_s-> __i = 0;
-            if (data_s->head2 == data) // 检查第二帧头
+            if (data_s->head2 == data_) // 检查第二帧头
             {
                 data_s-> __state++; // 进入下一状态
             }
@@ -131,13 +138,13 @@ unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
         break;
 
     case 1: // 接收数据的长度变量; 接收数据类型变量;
-        data_s->length = data >> 1;
-        data_s->type = data & 0x01;
+        data_s->length = data_ >> 1;
+        data_s->type = data_ & 0x01;
         data_s-> __state++;
         break;
 
     case 2: // 接收数据
-        data_s->data_union.buffer_data[data_s-> __i++] = data;
+        data_s->data_union.buffer_data[data_s-> __i++] = data_;
         if (data_s-> __i >= (2 * data_s->length))
         {
             data_s-> __state++;
@@ -145,17 +152,15 @@ unsigned char bluebird_unpack(Data_t *data_s, unsigned char data)
         break;
 
     case 3: // 接收数据校验和
-        data_s->check_sum = data;
+        data_s->check_sum = data_;
         data_s-> __state++;
         break;
 
     case 4: // 检查帧尾
-        if (data_s->tail == data)
+        if (data_s->tail == data_)
         {
-
-            unsigned char check_sum = 0;
             // 验证校验和是否正确
-            for (int i = 0; i < sizeof(unsigned short) * data_s->length; i++)
+            for (i = 0; i < sizeof(unsigned short) * data_s->length; i++)
             {
                 check_sum += data_s->data_union.buffer_data[i];
             }

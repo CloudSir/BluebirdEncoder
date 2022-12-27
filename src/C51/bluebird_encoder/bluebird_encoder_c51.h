@@ -2,7 +2,7 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-27 10:18:19
- * @LastEditTime: 2022-12-27 10:37:20
+ * @LastEditTime: 2022-12-27 10:46:52
  * @LastEditors: CloudSir
  * @Description: 
  */
@@ -40,12 +40,12 @@ typedef struct
 /**
  * 将要发送的数据编码成字节数组
  * @param {Data_t} *data_s 数据结构体指针
- * @param {unsigned short} *data 要传输的数据的数组
+ * @param {unsigned short} *data_ 要传输的数据的数组
  * @param {unsigned char} length 要传输的数据长度
  * @param {unsigned char} type 1:int16; 0:uint16
  * @return {uint_8} 1:成功；0：失败
  */
-unsigned char bluebird_pack(Data_t *data_s, unsigned short *data, unsigned char length, unsigned char type);
+unsigned char bluebird_pack(Data_t *data_s, unsigned short *data_, unsigned char length, unsigned char type);
 
 /**
  * 发送编码后的字节数组
@@ -57,11 +57,11 @@ unsigned char bluebird_send(Data_t *data_s, void (*uart_send)(unsigned char *, i
 
 /**
  * 将接收的字节数组解析为数据
- * @param {unsigned char} data 接收的字节
+ * @param {unsigned char} data_ 接收的字节
  * @param {Data_t} *data_s 数据结构体指针
  * @return {unsigned char} 1:接收成功；0：接收未完成；
  */
-unsigned char bluebird_unpack(Data_t *data_s, unsigned char data);
+unsigned char bluebird_unpack(Data_t *data_s, unsigned char data_);
 
 /**
  * 数据结构体初始化函数
