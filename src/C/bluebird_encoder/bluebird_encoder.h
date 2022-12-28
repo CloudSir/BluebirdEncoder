@@ -2,9 +2,10 @@
  * @Author: CloudSir
  * @Github: https://github.com/CloudSir
  * @Date: 2022-12-21 20:35:20
- * @LastEditTime: 2022-12-25 17:40:33
+ * @LastEditTime: 2022-12-28 11:04:51
  * @LastEditors: CloudSir
  * @Description: 青鸟编码器头文件
+ * @Version: 1.0
  */
 
 #ifndef __BLUEBIRD_PROTO__
