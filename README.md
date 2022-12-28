@@ -232,3 +232,7 @@ int main()
 | D<sub>3</sub>-D<sub>2N+2</sub> | 数据                             | int16 / uint16，小端序（低位在前）                           |
 | D<sub>2N+3</sub>               | 校验和                           | 数据位（D<sub>3</sub>-D<sub>2N+2</sub>）相加，和的低8位      |
 | D<sub>2N+4</sub>               | 帧尾                             | 固定值：0xBE                                                 |
+
+## 贡献说明
+
+提交 Pull Request 时请选择 develop 分支，请勿直接提交到主分支 main
